@@ -1,3 +1,9 @@
+using ApiCatalogoJogos.Middleware;
+using ApiCatalogoJogos.Repositories;
+using ApiCatalogoJogos.Repositories.Interface;
+using ApiCatalogoJogos.Services;
+using ApiCatalogoJogos.Services.Interface;
+using ExemploApiCatalogoJogos.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -19,6 +25,9 @@ namespace ApiCatalogoJogos
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IJogoService, JogoService>();
+            services.AddScoped<IJogoRepository, JogoRepository>();
+            //services.AddScoped<IJogoRepository, JogoSqlServerRepository>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -40,6 +49,8 @@ namespace ApiCatalogoJogos
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseAuthorization();
 
